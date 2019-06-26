@@ -34,7 +34,7 @@ object zio_types {
    * An effect that might fail with an error of type `E` or succeed with a
    * value of type `A`.
    */
-  type FailOrSuccess[E, A] = ???
+  type FailOrSuccess[E, A] = Task[A]
 
   /**
    * EXERCISE 2

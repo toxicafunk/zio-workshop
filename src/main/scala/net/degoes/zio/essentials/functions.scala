@@ -5,6 +5,8 @@ package essentials
 
 import java.time.LocalDate
 
+import scala.util.Try
+
 /**
  * Functions are total, deterministic, and free of side effects.
  */
@@ -16,15 +18,24 @@ object functions {
    * Convert the following partial procedure into a function.
    */
   def parseInt1(s: String): Int   = s.toInt
-  def parseInt2( /* ??? */ ): ??? = ???
+  def parseInt2( s: String ): Try[Int] = Try(s.toInt)
+  def parseInt3( s: String ): Option[Int] = Try(s.toInt).fold(_ => None, i => Some(i))
 
-  /**
-   * EXERCISE 2
-   *
-   * Convert the following partial procedure into a function.
-   */
-  def head1[A](l: List[A]): A    = l.head
-  def head2[A]( /* ??? */ ): ??? = ???
+  //EXERCISE 2
+  def divide1(a: Int, b: Int): Int = a / b
+  def divide2(a: Int, b: Int): Option[Int] = if (b == 0) Some(a/b) else None
+
+  //EXERCISE 3
+  def head1[A](l: Seq[A]): A     = l.head
+  def head2[A](l: Seq[A]): Option[A] = l.headOption
+
+  //EXERCISE 4
+  def secondChar1(str: String): Char = str.charAt(2)
+  def secondChar2(str: String): Option[Char] = if (str.size >= 3) Some(str.charAt(2)) else None
+
+  //EXERCISE 5
+  def abs(n: Int): Int = if (n < 0) throw new Exception(s"$n should be positive") else n
+  def absF(n: Int): Option[Int] = if (n < 0) None else Some(n)
 
   /**
    * EXERCISE 3
@@ -32,7 +43,7 @@ object functions {
    * Convert the following non-deterministic procedure into a deterministic function.
    */
   def increment1: Int              = scala.util.Random.nextInt(0) + 1
-  def increment2( /* ??? */ ): ??? = ???
+  def increment2(i: Int): Int = i + 1
 
   /**
    * EXERCISE 4
@@ -40,7 +51,18 @@ object functions {
    * Convert the following non-deterministic procedure into a deterministic function.
    */
   def nextDay1: LocalDate        = LocalDate.now.plusDays(1)
-  def nextDay2( /* ??? */ ): ??? = ???
+  def nextDay2(d: LocalDate): LocalDate = d.plusDays(1)
+  //EXERCISE 3
+  case object IncorrectAge extends Exception
+  def computeAge1(year: Int): Int = {
+    val age = LocalDate.now.getYear - year
+    if (age < 0) throw IncorrectAge
+    else age
+  }
+  def computeAge2(year: Int): Option[Int] = {
+    val age = LocalDate.now.getYear() - year
+    if (age < 0) None else Some(age)
+  }
 
   /**
    * EXERCISE 5
@@ -53,11 +75,16 @@ object functions {
   }
   def get2( /* ??? */ ): ??? = ???
 
-  /**
-   * EXERCISE 6
-   *
-   * Convert the following side-effecting procedure into a pure function.
-   */
+  //EXERCISE 2
+  def sumN1(n: Int): Int = {
+    var result = 0
+    (1 to n).foreach(i => result = result + i)
+    result
+  }
+  def sumN2(n: Int): Int = (1 to n).sum
+  def sumN3(n: Int): Int = (1 to n).fold(0)(_ + _)
+
+  //EXERCISE 3
   def updateArray1[A](arr: Array[A], i: Int, f: A => A): Unit =
     arr.update(i, f(arr(i)))
   def updateArray2[A]( /* ??? */ ): ??? = ???

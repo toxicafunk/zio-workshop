@@ -27,6 +27,7 @@ libraryDependencies ++= Seq(
   "org.scalaz" %% "scalaz-zio-streams" % ZIOVersion,
   // URL parsing
   "io.lemonlabs" %% "scala-uri" % "1.4.1"
+
 )
 
 scalacOptions in Compile in console := Seq(
